@@ -1,0 +1,5 @@
+[
+  {"type":"deluxe","#rooms":100,"clean_status": true},
+  {"type":"suite","#rooms":10,"clean_status": true},
+  {"type":"standard","#rooms":100,"clean_status": true}
+]
