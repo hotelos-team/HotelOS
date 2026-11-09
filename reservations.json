@@ -1,0 +1,26 @@
+[
+  {
+    "reservation_id": 5001,
+    "user_id": 1,
+    "room_id": 101,
+    "total_price": 250.0,
+    "advance_paid": 50.0,
+    "reservation_status": "Confirmed"
+  },
+  {
+    "reservation_id": 5002,
+    "user_id": 2,
+    "room_id": 102,
+    "total_price": 500.0,
+    "advance_paid": 100.0,
+    "reservation_status": "Pending"
+  },
+  {
+    "reservation_id": 5003,
+    "user_id": 3,
+    "room_id": 103,
+    "total_price": 350.0,
+    "advance_paid": 350.0,
+    "reservation_status": "Paid"
+  }
+]

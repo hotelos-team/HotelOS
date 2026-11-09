@@ -1,0 +1,62 @@
+[
+  {
+    "room_id": 101,
+    "room_type": "Deluxe",
+    "availability_status": "Maintenance",
+    "cleaning_status": "In Progress"
+  },
+  {
+    "room_id": 102,
+    "room_type": "Deluxe",
+    "availability_status": "Available",
+    "cleaning_status": "In Progress"
+  },
+  {
+    "room_id": 103,
+    "room_type": "Suite",
+    "availability_status": "Available",
+    "cleaning_status": "Clean"
+  },
+  {
+    "room_id": 104,
+    "room_type": "Deluxe",
+    "availability_status": "Reserved",
+    "cleaning_status": "In Progress"
+  },
+  {
+    "room_id": 105,
+    "room_type": "Standard",
+    "availability_status": "Reserved",
+    "cleaning_status": "Dirty"
+  },
+  {
+    "room_id": 106,
+    "room_type": "Deluxe",
+    "availability_status": "Occupied",
+    "cleaning_status": "Dirty"
+  },
+  {
+    "room_id": 107,
+    "room_type": "Standard",
+    "availability_status": "Reserved",
+    "cleaning_status": "In Progress"
+  },
+  {
+    "room_id": 108,
+    "room_type": "Deluxe",
+    "availability_status": "Occupied",
+    "cleaning_status": "Clean"
+  },
+  {
+    "room_id": 109,
+    "room_type": "Standard",
+    "availability_status": "Maintenance",
+    "cleaning_status": "Clean"
+  },
+  {
+    "room_id": 110,
+    "room_type": "Standard",
+    "availability_status": "Reserved",
+    "cleaning_status": "Clean"
+  }
+]
