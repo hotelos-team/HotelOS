@@ -30,3 +30,11 @@ class SimulationClock:
 
         # Apply new speed
         self.speed = new_speed
+# Create the simulation clock
+clock = SimulationClock(speed=60)
+print(clock.now)
+
+time.sleep(3)
+
+SimulationClock.set_speed(new_speed=30,self = None)
+print(clock.now)
