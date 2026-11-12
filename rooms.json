@@ -1,5 +1,166 @@
 [
-  {"type":"deluxe","#rooms":100,"clean_status": true},
-  {"type":"suite","#rooms":10,"clean_status": true},
-  {"type":"standard","#rooms":100,"clean_status": true}
+  {
+    "type": "deluxe",
+    "#rooms": 10,
+    "room": [
+      {
+        "room_id": 5001,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5002,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5003,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5004,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5005,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5006,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5007,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5008,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5009,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 5010,
+        "clean": true,
+        "status": "empty"
+      }
+    ]
+  },
+  {
+    "type": "suite",
+    "#rooms": 10,
+    "room": [
+      {
+        "room_id": 6001,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6002,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6003,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6004,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6005,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6006,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6007,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6008,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6009,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 6010,
+        "clean": true,
+        "status": "empty"
+      }
+    ]
+  },
+  {"type":"standard","#rooms":10,"room": [
+      {
+        "room_id": 7001,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7002,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7003,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7004,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7005,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7006,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7007,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7008,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7009,
+        "clean": true,
+        "status": "empty"
+      },
+      {
+        "room_id": 7010,
+        "clean": true,
+        "status": "empty"
+      }
+    ]}
 ]
