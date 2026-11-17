@@ -5,13 +5,17 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from fastapi import FastAPI,HTTPException
 import os
+from prebook import router as prebook_router
+
 app = FastAPI()
+app.include_router(prebook_router)
+
 
 class User(BaseModel):
     username: str
     password: str
 
-"""sayak"""
+
 #gives the largest user_id number from the users.json
 def find_largest_id():
     data=data_giver_user()
