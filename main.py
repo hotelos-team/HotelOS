@@ -4,8 +4,10 @@ from dotenv import load_dotenv
 
 from pydantic import BaseModel
 from fastapi import FastAPI,HTTPException
-import os
+from routers.pricing import router as pricing_router
 app = FastAPI()
+app.include_router(pricing_router)
+
 
 class User(BaseModel):
     username: str
