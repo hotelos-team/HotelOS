@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 from pydantic import BaseModel
-from fastapi import FastAPI
+from fastapi import APIRouter
 import os
 from utils.storage import read_data,write_data
 import time
@@ -9,7 +9,8 @@ import threading
 import utils.simulation_clock
 
 
-# @app.post("/rooms/{room_id}/cleaning/complete")
+router = APIRouter()
+
 def room_cleaning(room_id: int):
     time.sleep(30)
     
