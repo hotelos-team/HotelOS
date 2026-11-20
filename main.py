@@ -4,23 +4,29 @@ from dotenv import load_dotenv
 
 from pydantic import BaseModel
 from fastapi import FastAPI,HTTPException
+import os
+from prebook import router as prebook_router
 from routers.pricing import router as pricing_router
+from routers.stays import router as stays_router
+
 app = FastAPI()
+app.include_router(prebook_router)
 app.include_router(pricing_router)
+app.include_router(stays_router)
 
 
 class User(BaseModel):
     username: str
     password: str
 
-"""sayak"""
+
 #gives the largest user_id number from the users.json
 def find_largest_id():
     data=data_giver_user()
     max=0
     for user in data:
-        if( user["user_id"]>max):
-            max=user["user_id"]
+        if user.get("user_id", 0) > max:
+            max = user.get("user_id", 0)
     return max
 
 #Hands over the data from users.json file everytime its called
