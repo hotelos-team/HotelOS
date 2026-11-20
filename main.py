@@ -6,10 +6,13 @@ from pydantic import BaseModel
 from fastapi import FastAPI,HTTPException
 import os
 from prebook import router as prebook_router
+from services import router as services_router
+from revenue import router as revenue_router
 
 app = FastAPI()
 app.include_router(prebook_router)
-
+app.include_router(services_router)
+app.include_router(revenue_router)
 
 class User(BaseModel):
     username: str
