@@ -9,15 +9,6 @@ import threading
 import utils.simulation_clock
 
 
-#later in the project
-"""
-class User(BaseModel):
-    reservation_id :int = Field(default = max(dic["id"] for dic in open("reservation.json","r")))
-
-#pre-booking
-def booking(user_id):
-    generate room_id and reservation_id beforehand based on stored data"""
-
 # @app.post("/rooms/{room_id}/cleaning/complete")
 def room_cleaning(room_id: int):
     time.sleep(30)
