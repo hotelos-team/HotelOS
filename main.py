@@ -121,11 +121,11 @@ def sign_up(username:str="",password:str="",x_role:str='User'):
     data=data_giver_user()
     #Checks if the username and password is "" or not
     if(username.strip()=="" or password.strip()==""):
-        return {"message":"Empty input"}
+        raise HTTPException(status_code = 400,detail = "Invalid entry")
     #Checks if username already exists
     for user in data:
         if username==user["username"]:
-            return "username already exists"
+            raise HTTPException(status_code = 409,detail = f"Conflict {username} already exists")    
     #write the json file with new entry
     max=find_largest_id()+1
     with open("users.json","w") as file:
@@ -141,7 +141,7 @@ def login(username:str=None,password:str=None,x_role:str='User'):
     check_role(x_role,allowed=['User'])
 #if users.json DNE
     if not os.path.exists("users.json"):
-        return "file does not exist"
+        raise HTTPException(status_code=404,detail="users.json file does not exist")
 
     data=data_giver_user()
 
@@ -164,3 +164,52 @@ def admin_or_service_login(x_role:str=None,password:str=None):
     else:
         raise HTTPException(status_code=403,detail="The password is incorrect")
 
+#customer search function via username
+#anyone can search for username
+@app.get("/customers/id/{username}",tags=["Searching"])
+def customer_id(username:str):
+    if not os.path.exists('users.json'):
+        raise HTTPException(status_code = 404,detail = 'user data null')
+
+    all_data = data_giver_user()
+    for user in all_data:
+        if user.get("username",'').strip() == username.strip():
+            return {'user_id':user.get("user_id")}
+    raise HTTPException(status_code = 404,detail = 'user doesn\'t exist')
+
+#customer search via user_id
+@app.get("/customers/search/{id}",tags=["Searching"])
+def customer_search(id : int):
+    if not os.path.exists("users.json"):
+        raise HTTPException(status_code = 404 , detail = 'user data null')
+
+    all_data = data_giver_user()
+    for user in all_data:
+        if user.get('user_id') == id:
+            return {'username' : user.get("username")}
+    raise HTTPException(status_code = 404 , detail = 'id doesnt\'t exist')
+
+#Deletion of user from the user.json database
+#can be deleted only if the x_role is User or Admin
+#x_role is the query parameter
+@app.delete("/customer/delete/{username}/{password}",tags=["Delete"])
+def delete_customer(username:str,password:str,x_role:str='User'):
+    if(check_role(x_role,allowed=["User","Admin"])==None):
+        if not os.path.exists('users.json'):
+            raise HTTPException(status_code=404, detail='file doesn\'t exist')
+
+        all_data = data_giver_user()
+        clean_username = username.strip()
+
+        for user in all_data:
+            if user.get('username') == clean_username:
+                if decrypter(user.get("password")) != password:
+                    raise HTTPException(status_code=403, detail='Password Incorrect')
+
+                all_data.remove(user)
+                with open("users.json", "w") as file:
+                    json.dump(all_data, file, indent=2)
+
+                return {"message": "deleted"}
+    else:
+        raise HTTPException(status_code=404, detail='User dosen\'t exist')
