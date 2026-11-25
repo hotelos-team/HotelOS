@@ -18,7 +18,56 @@ class PrebookIn(BaseModel):
     room_id: int = Field(...) 
     check_in: str = Field(...)
     check_out: str = Field(...)
+class UserAuth(BaseModel):
+    username: str = Field(min_length=2, max_length=8)
+    password: str = Field(min_length=2)
 
+# 5. register a new user from prebook
+@router.post("/api/prebook/register", tags=["PreBooking"], status_code=201)
+def register_from_prebook(user: UserAuth):
+    # importing here so python doesnt give circular import error with main.py
+    from main import encrypter, find_largest_id
+
+    users = read_json('users.json')
+
+    # check if username is already taken
+    for u in users:
+        if u.get("username") == user.username:
+            raise HTTPException(status_code=409, detail="username already exists")
+
+    # get the next id number and encrypt the password like main.py does
+    new_id = find_largest_id() + 1
+    encrypted_pw = encrypter(user.password)
+
+    # making the new user dict in the same format as users.json
+    new_user = {
+        "user_id": new_id,
+        "username": user.username,
+        "password": encrypted_pw
+    }
+
+    # add to list and save back to file
+    users.append(new_user)
+    write_json('users.json', users)
+
+    return {"message": "user created", "id": new_id, "username": user.username}
+
+# 6. login to check if username and password match
+@router.post("/api/prebook/login", tags=["PreBooking"], status_code=200)
+def login_from_prebook(user: UserAuth):
+    # same thing, importing inside function to avoid circular import
+    from main import encrypter
+
+    users = read_json('users.json')
+    encrypted_pw = encrypter(user.password)
+
+    # loop through all users to find a match
+    for u in users:
+        if u.get("username") == user.username and u.get("password") == encrypted_pw:
+            return {"message": "login successful", "user_id": u.get("user_id"), "username": u.get("username")}
+
+    # if loop finishes without finding them, password or username is wrong
+    raise HTTPException(status_code=401, detail="invalid username or password")
 # safe function to read json so my server doesnt crash if the file is missing or weird
 def read_json(filename):
     path = DATA_DIR / filename
@@ -45,7 +94,7 @@ def validate_stay_dates(check_in, check_out):
     return start, end
 
 # 1. create a prebooking
-@router.post("/api/bookings/prebook", status_code=201)
+@router.post("/api/bookings/prebook", status_code=201,tags=["PreBooking"])
 def make_prebooking(booking: PrebookIn, x_role: str = Header(...)):
     # checking permissions to make sure they are allowed
     if x_role not in ["customer", "admin", "manager"]:
@@ -108,7 +157,7 @@ def make_prebooking(booking: PrebookIn, x_role: str = Header(...)):
     return new_book
 
 # 2. get all reservations (with optional filters)
-@router.get("/api/bookings")
+@router.get("/api/bookings",tags=["PreBooking"])
 def get_bookings(
     status: str = Query(None),
     room_id: int = Query(None),
@@ -135,7 +184,7 @@ def get_bookings(
     return result
 
 # 3. get bookings for a specific user
-@router.get("/api/bookings/{user_id}")
+@router.get("/api/bookings/{user_id}",tags=["PreBooking"])
 def get_user_bookings(user_id: str = Path(..., min_length=2, max_length=8), x_role: str = Header(...)):
     if x_role == "":
         raise HTTPException(status_code=401, detail="role is missing")
@@ -154,7 +203,7 @@ def get_user_bookings(user_id: str = Path(..., min_length=2, max_length=8), x_ro
     return my_books
 
 # 4. delete a user and wipe their bookings
-@router.delete("/api/users/{user_id}", status_code=204)
+@router.delete("/api/users/{user_id}",tags=["PreBooking"], status_code=204)
 def delete_user_stuff(user_id: str = Path(..., min_length=2, max_length=8), x_role: str = Header(...)):
     # strictly admin only
     if x_role != "admin":
