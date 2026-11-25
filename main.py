@@ -14,65 +14,19 @@ app.include_router(prebook_router)
 app.include_router(pricing_router)
 app.include_router(stays_router)
 
-
 class User(BaseModel):
     username: str
     password: str
-
-
-#gives the largest user_id number from the users.json
-def find_largest_id():
-    data=data_giver_user()
-    max=0
-    for user in data:
-        if user.get("user_id", 0) > max:
-            max = user.get("user_id", 0)
-    return max
-
-#Hands over the data from users.json file everytime its called
-def data_giver_user():
-    if os.path.exists("users.json"):
-        with open("users.json","r") as file:
-            data=json.load(file)
-            return data
-    else:
-        return None
-def data_giver_room():
-    with open('rooms.json','r') as file:
-        data=json.load(file)
-        return data
-#Encrypter and decrypter function
-load_dotenv("important.env")
-def encrypter(text:str) -> str:
-    a=int(os.getenv("a"))
-    b=int(os.getenv("b"))
-    if text==None:
-        return ""
-    else:
-        encryp=""
-        for ch in text:
-            encryp+=chr(ord(ch)*a+b)
-        return encryp
-
-#Decrypter function using keys a and b
-def decrypter(text:str) -> str:
-    a = int(os.getenv("a"))
-    b = int(os.getenv("b"))
-    if(text==None):
-        return ""
-    else:
-        decryp=""
-        for ch in text:
-            decryp+=chr((ord(ch) - b) // a)
-
-        return decryp
-
+@app.get("/",tags=["Server"])
+def home():
+    return {"OUR FIRST PROJECT ":"HOTEL OS"}
 #returns if the server is running or not
+#if not found return then show USER DATA NULL
 @app.get("/health",tags=["Server"])
 def health():
     return {"status": "ok"}
 
-#Gives the users.json file asked by user
+#Gives the users.json file asked by Admin only
 @app.get("/users/{x_role}/{password}",tags=["Server"])
 def users_data(x_role:str="",password:str=""):
     if(check_role(x_role,allowed=['Admin'])==None and admin_or_service_login(x_role,password)=='Success'):
@@ -101,6 +55,7 @@ def rooms_data(x_role:str="",password:str=""):
         raise HTTPException(status_code=403,detail=f"The role {x_role} is not allowed to see")
 
 #for checking roles ie Admin || Service || User
+#returns None is it is true
 def check_role(x_role,allowed):
     if x_role not in ('User','Admin','Service'):
         raise HTTPException(status_code=401,detail="Send the header X-Role with Admin or Service or User")
@@ -125,7 +80,7 @@ def sign_up(username:str="",password:str="",x_role:str='User'):
     #Checks if username already exists
     for user in data:
         if username==user["username"]:
-            raise HTTPException(status_code = 409,detail = f"Conflict {username} already exists")    
+            raise HTTPException(status_code = 409,detail = f"Conflict {username} already exists")
     #write the json file with new entry
     max=find_largest_id()+1
     with open("users.json","w") as file:
@@ -164,6 +119,7 @@ def admin_or_service_login(x_role:str=None,password:str=None):
     else:
         raise HTTPException(status_code=403,detail="The password is incorrect")
 
+
 #customer search function via username
 #anyone can search for username
 @app.get("/customers/id/{username}",tags=["Searching"])
@@ -189,6 +145,7 @@ def customer_search(id : int):
             return {'username' : user.get("username")}
     raise HTTPException(status_code = 404 , detail = 'id doesnt\'t exist')
 
+
 #Deletion of user from the user.json database
 #can be deleted only if the x_role is User or Admin
 #x_role is the query parameter
@@ -213,3 +170,53 @@ def delete_customer(username:str,password:str,x_role:str='User'):
                 return {"message": "deleted"}
     else:
         raise HTTPException(status_code=404, detail='User dosen\'t exist')
+
+#gives the largest user_id number from the users.json
+def find_largest_id():
+    data=data_giver_user()
+    max=0
+    for user in data:
+        if( user["user_id"]>max):
+            max=user["user_id"]
+    return max
+
+#Hands over the data from users.json file everytime its called
+def data_giver_user():
+    if os.path.exists("users.json"):
+        with open("users.json","r") as file:
+            data=json.load(file)
+            return data
+    else:
+        return None
+def data_giver_room():
+    if os.path.exists("rooms.json"):
+        with open('rooms.json','r') as file:
+            data=json.load(file)
+            return data
+    else:
+        return None
+#Encrypter and decrypter function
+load_dotenv("important.env")
+def encrypter(text:str) -> str:
+    a=int(os.getenv("a"))
+    b=int(os.getenv("b"))
+    if text==None:
+        return ""
+    else:
+        encryp=""
+        for ch in text:
+            encryp+=chr(ord(ch)*a+b)
+        return encryp
+
+#Decrypter function using keys a and b
+def decrypter(text:str) -> str:
+    a = int(os.getenv("a"))
+    b = int(os.getenv("b"))
+    if(text==None):
+        return ""
+    else:
+        decryp=""
+        for ch in text:
+            decryp+=chr((ord(ch) - b) // a)
+
+        return decryp
