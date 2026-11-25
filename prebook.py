@@ -4,7 +4,7 @@ import json
 import uuid
 
 # setting up router so it doesn't clutter up the main file
-router = APIRouter()
+router = APIRouter(tags = ["Prebooking"])
 
 # my input model for the post request
 # using Field to make sure the user_id is between 2 and 8 characters long!
@@ -25,6 +25,59 @@ def read_json(filename):
 def write_json(filename, data):
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
+
+
+# model for taking username and password
+class UserAuth(BaseModel):
+    username: str = Field(min_length=2, max_length=8)
+    password: str = Field(min_length=2)
+
+# 5. register a new user from prebook
+@router.post("/api/prebook/register", status_code=201)
+def register_from_prebook(user: UserAuth):
+    # importing here so python doesnt give circular import error with main.py
+    from main import encrypter, find_largest_id
+
+    users = read_json('users.json')
+
+    # check if username is already taken
+    for u in users:
+        if u.get("username") == user.username:
+            raise HTTPException(status_code=409, detail="username already exists")
+
+    # get the next id number and encrypt the password like main.py does
+    new_id = find_largest_id() + 1
+    encrypted_pw = encrypter(user.password)
+
+    # making the new user dict in the same format as users.json
+    new_user = {
+        "id": new_id,
+        "username": user.username,
+        "password": encrypted_pw
+    }
+
+    # add to list and save back to file
+    users.append(new_user)
+    write_json('users.json', users)
+
+    return {"message": "user created", "id": new_id, "username": user.username}
+
+# 6. login to check if username and password match
+@router.post("/api/prebook/login", status_code=200)
+def login_from_prebook(user: UserAuth):
+    # same thing, importing inside function to avoid circular import
+    from main import encrypter
+
+    users = read_json('users.json')
+    encrypted_pw = encrypter(user.password)
+
+    # loop through all users to find a match
+    for u in users:
+        if u.get("username") == user.username and u.get("password") == encrypted_pw:
+            return {"message": "login successful", "id": u.get("id"), "username": u.get("username")}
+
+    # if loop finishes without finding them, password or username is wrong
+    raise HTTPException(status_code=401, detail="invalid username or password")
 
 # 1. create a prebooking
 @router.post("/api/bookings/prebook", status_code=201)
