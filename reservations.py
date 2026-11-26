@@ -43,7 +43,7 @@ def room_cleaning(room_id: int):
         detail="Room ID not found"
     )
 
-@app.get("/rooms/{room_type}")
+@router.get("/rooms/{room_type}")
 def get_available_rooms(room_type: str):
     room_types = read_data("rooms.json")
 
@@ -63,7 +63,7 @@ def get_available_rooms(room_type: str):
     )
 
 
-@app.post("/reservations/{reservation_id}/check-in/{user_id}")
+@router.post("/reservations/{reservation_id}/check-in/{user_id}")
 def check_in(reservation_id: int, user_id: int):
 
     room_types = read_data("rooms.json")
@@ -136,7 +136,7 @@ def check_in(reservation_id: int, user_id: int):
         "room_id": reservation["room_id"]
     }
 
-@app.post("/reservations/{reservation_id}/check-out/{user_id}")
+@router.post("/reservations/{reservation_id}/check-out/{user_id}")
 def check_out(user_id,reservation_id : int):
 
     room_types = read_data("rooms.json")
