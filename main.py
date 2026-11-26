@@ -9,10 +9,26 @@ from prebook import router as prebook_router
 from services import router as services_router
 from revenue import router as revenue_router
 
+
+# server
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
 app = FastAPI()
 app.include_router(prebook_router)
 app.include_router(services_router)
 app.include_router(revenue_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://hotel-os-wheat-eight.vercel.app"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class User(BaseModel):
     username: str
