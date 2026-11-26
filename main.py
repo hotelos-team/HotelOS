@@ -14,13 +14,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://hotel-os-wheat-eight.vercel.app",
-        "https://hotel-low5ejwuf-sant0xdev.vercel.app",
-    ],
+    allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
-    allow_headers=["Accept", "Content-Type", "X-Role", "Authorization"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 app.include_router(prebook_router)
 app.include_router(pricing_router)
