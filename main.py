@@ -4,12 +4,20 @@ from dotenv import load_dotenv
 
 from pydantic import BaseModel
 from fastapi import FastAPI,HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import os
 from prebook import router as prebook_router
 from routers.pricing import router as pricing_router
 from routers.stays import router as stays_router
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://hotel-os-wheat-eight.vercel.app"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
+    allow_headers=["Accept", "Content-Type", "X-Role", "Authorization"],
+)
 app.include_router(prebook_router)
 app.include_router(pricing_router)
 app.include_router(stays_router)
