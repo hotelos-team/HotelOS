@@ -1,24 +1,16 @@
 import json
 from dataclasses import dataclass
 from pydantic import BaseModel
-from fastapi import FastAPI
-import os
-from utils.storage import read_data,write_data
+from fastapi import APIRouter
+from storage import read_data,write_data
 import time
 import threading 
-import utils.simulation_clock
+import simulation_clock
 
 
-#later in the project
-"""
-class User(BaseModel):
-    reservation_id :int = Field(default = max(dic["id"] for dic in open("reservation.json","r")))
 
-#pre-booking
-def booking(user_id):
-    generate room_id and reservation_id beforehand based on stored data"""
+router = APIRouter()
 
-# @app.post("/rooms/{room_id}/cleaning/complete")
 def room_cleaning(room_id: int):
     time.sleep(30)
     
@@ -51,7 +43,7 @@ def room_cleaning(room_id: int):
         detail="Room ID not found"
     )
 
-@app.get("/rooms/{room_type}")
+@router.get("/rooms/{room_type}")
 def get_available_rooms(room_type: str):
     room_types = read_data("rooms.json")
 
@@ -71,7 +63,7 @@ def get_available_rooms(room_type: str):
     )
 
 
-@app.post("/reservations/{reservation_id}/check-in/{user_id}")
+@router.post("/reservations/{reservation_id}/check-in/{user_id}")
 def check_in(reservation_id: int, user_id: int):
 
     room_types = read_data("rooms.json")
@@ -144,7 +136,7 @@ def check_in(reservation_id: int, user_id: int):
         "room_id": reservation["room_id"]
     }
 
-@app.post("/reservations/{reservation_id}/check-out/{user_id}")
+@router.post("/reservations/{reservation_id}/check-out/{user_id}")
 def check_out(user_id,reservation_id : int):
 
     room_types = read_data("rooms.json")
