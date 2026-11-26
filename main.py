@@ -11,9 +11,13 @@ from routers.pricing import router as pricing_router
 from routers.stays import router as stays_router
 
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://hotel-os-wheat-eight.vercel.app"],
+    allow_origins=[
+        "https://hotel-os-wheat-eight.vercel.app",
+        "https://hotel-low5ejwuf-sant0xdev.vercel.app",
+    ],
     allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
     allow_headers=["Accept", "Content-Type", "X-Role", "Authorization"],
