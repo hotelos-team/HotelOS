@@ -1,4 +1,8 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '/backend';
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://hotelos-w18l.onrender.com').replace(/\/+$/, '');
+
+function apiUrl(path) {
+  return `${API_BASE}/${String(path).replace(/^\/+/, '')}`;
+}
 
 async function request(path, { method = 'GET', body, role, signal } = {}) {
   const headers = { Accept: 'application/json' };
@@ -6,7 +10,7 @@ async function request(path, { method = 'GET', body, role, signal } = {}) {
   if (role) headers['X-Role'] = role;
   let response;
   try {
-    response = await fetch(`${API_BASE}${path}`, {
+    response = await fetch(apiUrl(path), {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),

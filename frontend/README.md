@@ -18,9 +18,9 @@ npm install
 npm run dev
 ```
 
-Open the URL printed by Vite (normally `http://localhost:5173`). Vite proxies `/backend/*` to `http://127.0.0.1:8000`, avoiding a backend CORS change. To use a different backend for development, copy `.env.example` to `.env.local` and set `VITE_BACKEND_URL`.
+Open the URL printed by Vite (normally `http://localhost:5173`). The API client reads `VITE_API_URL`; copy `.env.example` to `.env.local` to use the deployed HotelOS backend or set that variable to another FastAPI origin. Vite does not proxy API requests.
 
-For a production build, run `npm run build`. When hosting the static `dist/` output separately, configure a reverse proxy from `/backend` to the FastAPI origin, or set `VITE_API_BASE_URL` to the API origin and enable CORS on that deployment.
+For Vercel, set `VITE_API_URL=https://hotelos-w18l.onrender.com` in the project’s environment variables, then redeploy. For a production build, run `npm run build`. Because the frontend calls the API origin directly, the FastAPI deployment must allow the Vercel site’s origin through CORS for browser requests (including `X-Role` and JSON content headers).
 
 ## Workflows and backend limits
 
